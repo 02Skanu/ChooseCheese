@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_Home"
+        android:icon="@drawable/selector_home_icon"
+        android:title="@string/label_home_icon" />
+    <item
+        android:id="@+id/navigation_Qr"
+        android:icon="@drawable/selector_qr_icon"
+        android:title="@string/label_qr_icon" />
+    <item
+        android:id="@+id/navigation_Rank"
+        android:icon="@drawable/selector_rank_icon"
+        android:title="@string/label_cart_icon"/>
+</menu>

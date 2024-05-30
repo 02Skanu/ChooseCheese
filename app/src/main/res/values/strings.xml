@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">ChooseCheese</string>
+    <string name="label_home_icon">Home</string>
+    <string name="label_qr_icon">QR</string>
+    <string name="label_cart_icon">Cart</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login_id">아이디</string>
+    <string name="login_password">비밀번호</string>
+    <string name="login_sign_up"><u>회원가입</u></string>
+    <string name="login_title">로그인</string>
+    <string name="login_find_client">아이디/비밀번호 찾기</string>
+    <string name="login_login_button">로그인</string>
+    <string name="login_sign_up_guide">아직 회원이 아니신가요?</string>
+</resources>
