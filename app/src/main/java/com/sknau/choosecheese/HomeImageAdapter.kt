@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sknau.choosecheese.R
 
-class HomeImageAdapter : RecyclerView.Adapter<HomeImageAdapter.ImageViewHolder>() {
+class HomeImageAdapter(private val onClick: (String) -> Unit) : RecyclerView.Adapter<HomeImageAdapter.ImageViewHolder>() {
 
     private val images = mutableListOf<String>()
 
@@ -41,6 +41,10 @@ class HomeImageAdapter : RecyclerView.Adapter<HomeImageAdapter.ImageViewHolder>(
                 .load(imageUrl)
                 .placeholder(R.drawable.placeholder_image)
                 .into(itemView.findViewById(R.id.home_imageView))
+
+            itemView.setOnClickListener {
+                onClick(imageUrl)
+            }
         }
     }
 }

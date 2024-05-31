@@ -5,5 +5,5 @@ import retrofit2.http.GET
 
 interface SmileCostApiService {
     @GET("main/misopoint")
-    fun getImages(): Call<SmileCostData>
+    fun getSmileImages(): Call<SmileCostData>
 }

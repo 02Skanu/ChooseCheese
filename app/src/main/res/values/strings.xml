@@ -12,4 +12,7 @@
     <string name="login_find_client">아이디/비밀번호 찾기</string>
     <string name="login_login_button">로그인</string>
     <string name="login_sign_up_guide">아직 회원이 아니신가요?</string>
+    <string name="miso_point">M%1$d 원</string>
+    <string name="smile_text_ment">*이미지 클릭 시 미소 점수가 나타납니다.</string>
+    <string name="smile_text_cost">당신의 미소 금액</string>
 </resources>

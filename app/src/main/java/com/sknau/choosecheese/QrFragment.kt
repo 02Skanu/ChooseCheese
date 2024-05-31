@@ -16,7 +16,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class QrFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,10 +25,8 @@ class QrFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_qr, container, false)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,6 +39,7 @@ class QrFragment : Fragment() {
         intentIntegrator.setBarcodeImageEnabled(false)
         intentIntegrator.initiateScan()
     }
+
     override fun onActivityResult(
         requestCode: Int,
         resultCode: Int,
@@ -50,43 +48,36 @@ class QrFragment : Fragment() {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
             if (result.contents == null) {
-                Toast.makeText(context, "cancelled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show()
             } else {
-                Log.d("Fragment", "Scanned from Fragment")
-                Toast.makeText(context, "Scanned -> " + result.contents, Toast.LENGTH_SHORT)
-                    .show()
-                Log.d("Fragment", "$result")
+                Log.d("QrFragment", "Scanned from Fragment: ${result.contents}")
+                Toast.makeText(context, "Scanned -> " + result.contents, Toast.LENGTH_SHORT).show()
 
-                val sharedPreferences = this.getActivity()?.getSharedPreferences("accessTOKEN",
-                    AppCompatActivity.MODE_PRIVATE
-                )
+                val sharedPreferences = this.getActivity()?.getSharedPreferences("accessTOKEN", AppCompatActivity.MODE_PRIVATE)
                 val authToken = sharedPreferences?.getString("accessToken", null)?.let {
                     it
                 } ?: ""
 
                 val retrofit = LogicApiClient.getClient(authToken)
-
                 val apiService = retrofit.create(QrApiService::class.java)
-                val data = QrData(result.contents) // QR 코드 결과를 사용하여 데이터 객체 생성
+                val data = QrData(result.contents)
 
-                apiService.sendData(data).enqueue(object : Callback<List<ResponseData>> {
-                    override fun onResponse(call: Call<List<ResponseData>>, response: Response<List<ResponseData>>) {
+                apiService.sendData(data).enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if (response.isSuccessful) {
-                            val responseData = response.body()
-                            // Assuming we want to pass the first imageUrl or concatenate all imageUrls into a single string
-                            val imageUrls = responseData?.map { it.imageUrl }?.joinToString(",") ?: ""
-                            val bundle = bundleOf("imageUrl" to imageUrls)
+                            Log.d("QrFragment", "Data sent successfully")
+                            val bundle = bundleOf("imageUrl" to result.contents)
                             findNavController().navigate(R.id.action_qrFragment_to_homeFragment, bundle)
+                            Log.d("QrFragment", "Navigating to HomeFragment")
                         } else {
-                            // 에러 처리
+                            Log.e("Response Error", "Code: ${response.code()}, Message: ${response.message()}")
                         }
                     }
 
-                    override fun onFailure(call: Call<List<ResponseData>>, t: Throwable) {
-                        // 실패 처리
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Log.e("Network Error", "Connection failed", t)
                     }
                 })
-
 
                 val mActivity = activity as MainActivity
                 mActivity.finishScan()
