@@ -39,7 +39,6 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = GridLayoutManager(context, 2)
 
         adapter = HomeImageAdapter { imageUrl ->
-            // 이미지 클릭 시 서버에 전송하고 SmileCostActivity로 이동
             apiService.sendImageClick(imageUrl).enqueue(object : Callback<ClickResponseData> {
                 override fun onResponse(call: Call<ClickResponseData>, response: Response<ClickResponseData>) {
                     if (response.isSuccessful) {
@@ -67,26 +66,26 @@ class HomeFragment : Fragment() {
         val retrofit = LogicApiClient.getClient(authToken)
         val apiService = retrofit.create(QrApiService::class.java)
 
-        apiService.getExistingImages().enqueue(object : Callback<List<ResponseData>> {
-            override fun onResponse(call: Call<List<ResponseData>>, response: Response<List<ResponseData>>) {
+        apiService.getExistingImages().enqueue(object : Callback<ResponseData> {
+            override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
                 if (response.isSuccessful) {
-                    val responseData = response.body()
-                    responseData?.forEach { responseDataItem ->
-                        responseDataItem.imageUrl?.let { imageUrl ->
-                            imageUrlList.add(imageUrl)
-                            adapter.addImages(listOf(imageUrl))
-                        }
-                    }
+                    val imageUrls = response.body()?.imageUrl ?: emptyList()
+
+                    imageUrlList.addAll(imageUrls)
+                    adapter.addImages(imageUrls)
+
+                    Log.d("HomeFragment", "이미지 로드 성공: $imageUrls")
                 } else {
-                    Log.e("HomeFragment", "Failed to load existing images")
+                    Log.e("HomeFragment", "XXXXXX")
                 }
             }
 
-            override fun onFailure(call: Call<List<ResponseData>>, t: Throwable) {
-                Log.e("HomeFragment", "Failed to load existing images", t)
+            override fun onFailure(call: Call<ResponseData>, t: Throwable) {
+                Log.e("HomeFragment", "이미지 로드 실패", t)
             }
         })
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

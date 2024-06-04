@@ -9,7 +9,7 @@ data class QrData(
 )
 
 data class ResponseData(
-    val imageUrl: String
+    val imageUrl: List<String>
 )
 
 

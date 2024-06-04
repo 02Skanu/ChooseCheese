@@ -16,5 +16,5 @@ interface QrApiService {
 
     @GET("crawling_server")
     //@GET("qrcode")
-    fun getExistingImages(): Call<List<ResponseData>>
+    fun getExistingImages(): Call<ResponseData>
 }

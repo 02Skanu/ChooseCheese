@@ -21,6 +21,7 @@ class SmileCostActivity: AppCompatActivity() {
     private lateinit var binding: ActivitySmileCostBinding
     private var smileUrl: String? = null
     private var misoPoint: Int = 0
+    private var count: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +69,12 @@ class SmileCostActivity: AppCompatActivity() {
                         .load(it)
                         .placeholder(R.drawable.placeholder_image)
                         .into(cardImg)
-                    showMisoPoint()
+                    if(count % 2 == 0)
+                        showMisoPoint()
+                    else
+                        hideMisoPoint()
+
+                    count += 1
                 }
                 oa2.start()
             }
@@ -82,5 +88,10 @@ class SmileCostActivity: AppCompatActivity() {
         val misoPointTextView: TextView = findViewById(R.id.smile_text_cost)
         misoPointTextView.text = getString(R.string.miso_point, misoPoint)
         misoPointTextView.visibility = View.VISIBLE
+    }
+    private fun hideMisoPoint() {
+        val misoPointTextView: TextView = findViewById(R.id.smile_text_cost)
+
+        misoPointTextView.visibility = View.GONE
     }
 }
