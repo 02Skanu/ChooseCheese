@@ -9,12 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.sknau.choosecheese.databinding.FragmentTwopeopleBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class TwoPeopleFragment: Fragment() {
+class TwoPeopleFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PeopleAdapter
 
@@ -23,22 +22,20 @@ class TwoPeopleFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         val view = inflater.inflate(R.layout.fragment_twopeople, container, false)
         recyclerView = view.findViewById(R.id.people2_recyclerView)
-        recyclerView.layoutManager = GridLayoutManager(context,2)
+        recyclerView.layoutManager = GridLayoutManager(context, 2)
         return view
     }
-    //  페이징
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val sharedPreferences = this.getActivity()?.getSharedPreferences("accessTOKEN",
             AppCompatActivity.MODE_PRIVATE
         )
-        val authToken = sharedPreferences?.getString("accessToken", null)?.let {
-            it
-        } ?: ""
+        val authToken = sharedPreferences?.getString("accessToken", null) ?: ""
+
         val retrofit = LogicApiClient.getClient(authToken)
         val apiService = retrofit.create(People2ApiService::class.java)
 
@@ -49,7 +46,9 @@ class TwoPeopleFragment: Fragment() {
                     val peopleDataList = imageUrls.map { PeopleData(it) }
                     Log.d("check", "List contents: $peopleDataList")
 
-                    adapter = PeopleAdapter(peopleDataList)
+                    adapter = PeopleAdapter(peopleDataList) { imageUrl ->
+                        sendHeartClick(imageUrl, authToken)
+                    }
                     recyclerView.adapter = adapter
                 }
             }
@@ -60,4 +59,22 @@ class TwoPeopleFragment: Fragment() {
         })
     }
 
+    private fun sendHeartClick(imageUrl: String, authToken: String) {
+        val retrofit = LogicApiClient.getClient(authToken)
+        val apiService = retrofit.create(People2ApiService::class.java)
+
+        apiService.sendImageClick(imageUrl).enqueue(object : Callback<ClickResponseData> {
+            override fun onResponse(call: Call<ClickResponseData>, response: Response<ClickResponseData>) {
+                if (response.isSuccessful) {
+                    Log.d("PeopleFragment", "Image click sent successfully")
+                } else {
+                    Log.e("PeopleFragment", "Failed to send image click")
+                }
+            }
+
+            override fun onFailure(call: Call<ClickResponseData>, t: Throwable) {
+                Log.e("PeopleFragment", "Failed to send image click", t)
+            }
+        })
+    }
 }

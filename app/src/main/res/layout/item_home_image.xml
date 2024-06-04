@@ -17,4 +17,14 @@
         app:layout_constraintStart_toStartOf="parent"
         android:scaleType="fitXY"/>
 
+    <ImageView
+        android:id="@+id/heart_imageview"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="12dp"
+        android:src="@drawable/heart_empty"
+        app:layout_constraintBottom_toBottomOf="@+id/home_imageView"
+        app:layout_constraintEnd_toEndOf="@+id/home_imageView"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

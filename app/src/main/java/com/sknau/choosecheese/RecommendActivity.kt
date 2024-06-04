@@ -86,7 +86,7 @@ class RecommendActivity : AppCompatActivity() {
             startActivity(intent)
         }
         button_c.setOnClickListener {
-            val intent = Intent(this, SmileCostActivity::class.java)
+            val intent = Intent(this, CartActivity::class.java)
             startActivity(intent)
         }
     }
