@@ -12,12 +12,12 @@ class PoseAdapter(private val images: List<PoseData>) : RecyclerView.Adapter<Pos
 
 
     class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageView: ImageView = itemView.findViewById(R.id.home_imageView)
+        val imageView: ImageView = itemView.findViewById(R.id.heart_imageview)
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_image, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_people_heart_empty, parent, false)
         return ImageViewHolder(view)
     }
 

@@ -34,14 +34,16 @@ class RankAdapter(private var ranks: List<RankItem>) : RecyclerView.Adapter<Rank
         private val personImageView: ImageView = itemView.findViewById(R.id.item_rank_person)
         private val nameTextView: TextView = itemView.findViewById(R.id.item_rank_info_name)
         private val scoreTextView: TextView = itemView.findViewById(R.id.item_rank_info_money)
+        private val misoTextView: TextView = itemView.findViewById(R.id.item_rank_info_miso)
 
         fun bind(rank: RankItem) {
-            rankTextView.text = rank.rank
-            nameTextView.text = rank.name
-            scoreTextView.text = "Score: ${rank.score}"
+            rankTextView.text = rank.rank.toString()
+            nameTextView.text = rank.username
+            scoreTextView.text = "Score: ${rank.total_miso}"
+            misoTextView.text = "미소"
 
             Glide.with(itemView.context)
-                .load(rank.picture)
+                .load(rank.emoji)
                 .into(personImageView)
         }
     }

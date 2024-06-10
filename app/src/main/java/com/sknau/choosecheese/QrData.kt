@@ -8,10 +8,19 @@ data class QrData(
     val qrImageUrl: String
 )
 
-data class ResponseData(
+data class ImageResponse(
+    val pdb_paths: List<String>,
     val imageUrl: List<String>
 )
 
+
+data class ResponseData(
+    val originalS3: String
+)
+
+data class sendTogetherData(
+    val user_uuid: String
+)
 
 data class ClickResponseData(
     val original_url: String?,

@@ -49,6 +49,12 @@
         <activity
             android:name=".PoseActivity"
             android:exported="false"/>
+        <activity
+            android:name=".CartActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".TogetherActivity"
+            android:exported="false"/>
 
     </application>
 

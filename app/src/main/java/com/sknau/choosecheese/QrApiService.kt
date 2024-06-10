@@ -10,11 +10,20 @@ interface QrApiService {
     //@POST("qrcode")
     fun sendData(@Body data: QrData): Call<Void>
 
-    @POST("crawling_server")
-    //@POST("qrcode")
-    fun sendImageClick(@Body imageUrl: String): Call<ClickResponseData>
+    @GET("main")
+    fun getExistingImages(): Call<ImageResponse>
 
-    @GET("crawling_server")
-    //@GET("qrcode")
-    fun getExistingImages(): Call<ResponseData>
+    @POST("main/misopoint")
+    fun sendImageClick(@Body data: ResponseData): Call<ClickResponseData>
+
+    @GET("main")
+    fun getStoryImages(): Call<ImageResponse>
+
+
+
+    @POST("main/demo")
+    fun sendTogetherImages(@Body data: sendTogetherData): Call<List<String>>
+
 }
+
+

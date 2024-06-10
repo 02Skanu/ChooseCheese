@@ -34,11 +34,11 @@ class PeopleActivity : AppCompatActivity(){
         Log.d("ButtonViewpagerDebug", "buttonViewpager: ${binding.buttonViewpager}")
 
         val fragmentList = ArrayList<Fragment>()
-        fragmentList.add(OnePeopleFragment())
-        fragmentList.add(TwoPeopleFragment())
-        fragmentList.add(ThreePeopleFragment())
-        fragmentList.add(FourPeopleFragment())
-        fragmentList.add(FivePeopleFragment())
+        fragmentList.add(People1Fragment())
+        fragmentList.add(People2Fragment())
+        fragmentList.add(People3Fragment())
+        fragmentList.add(People4Fragment())
+        fragmentList.add(People5Fragment())
 
         viewPager.adapter = ViewPagerAdapter(fragmentList, this)
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){

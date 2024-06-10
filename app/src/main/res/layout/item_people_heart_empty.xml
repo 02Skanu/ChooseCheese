@@ -10,11 +10,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
-        android:id="@+id/home_imageView"
+        android:id="@+id/people_heart_imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"/>
+
+    <ImageView
+        android:id="@+id/heart_imageview"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="12dp"
+        android:src="@drawable/heart_empty"
+        app:layout_constraintBottom_toBottomOf="@+id/people_heart_imageView"
+        app:layout_constraintEnd_toEndOf="@+id/people_heart_imageView"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

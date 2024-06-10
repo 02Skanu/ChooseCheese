@@ -1,13 +1,13 @@
 package com.sknau.choosecheese
 
 data class RankItem(
-    val rank: String?,
-    val picture: String?,
-    val name: String?,
-    val score: Int?
+    val emoji: String,
+    val rank: Int,
+    val username: String,
+    val total_miso: Int
 )
 
 data class RankData(
-    val rank: List<RankItem>,
-    val total_score: Int?
+    val ranking: List<RankItem>,
+    val my_total_miso: List<Int>
 )

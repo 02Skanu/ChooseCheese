@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
@@ -15,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.sknau.choosecheese.databinding.ActivitySmileCostBinding
 
-class SmileCostActivity: AppCompatActivity() {
+class SmileCostActivity : AppCompatActivity() {
 
     private lateinit var cardImg: ImageView
     private lateinit var binding: ActivitySmileCostBinding
@@ -28,9 +29,11 @@ class SmileCostActivity: AppCompatActivity() {
         binding = ActivitySmileCostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        cardImg = findViewById(R.id.cardImg) // cardImg 초기화
+
         val button: ImageButton = findViewById(R.id.cost_back_button)
         button.setOnClickListener {
-            val intent = Intent(this, RecommendActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
@@ -38,10 +41,10 @@ class SmileCostActivity: AppCompatActivity() {
         clickResponseData?.let {
             smileUrl = it.smile_url
             misoPoint = it.miso_point
+            Log.d("미소확인",misoPoint.toString())
             showOriginalImage(it.original_url)
         }
 
-        cardImg = findViewById<ImageView>(R.id.cardImg)
         cardImg.setOnClickListener { flipAnimation() }
     }
 
@@ -69,7 +72,7 @@ class SmileCostActivity: AppCompatActivity() {
                         .load(it)
                         .placeholder(R.drawable.placeholder_image)
                         .into(cardImg)
-                    if(count % 2 == 0)
+                    if (count % 2 == 0)
                         showMisoPoint()
                     else
                         hideMisoPoint()
@@ -80,17 +83,19 @@ class SmileCostActivity: AppCompatActivity() {
             }
         })
         oa1.start()
-        oa1.duration = 1000
-        oa2.duration = 1000
+        oa1.duration = 300
+        oa2.duration = 300
     }
 
+
     private fun showMisoPoint() {
-        val misoPointTextView: TextView = findViewById(R.id.smile_text_cost)
+        val misoPointTextView: TextView = findViewById(R.id.miso_point_text_view)
         misoPointTextView.text = getString(R.string.miso_point, misoPoint)
         misoPointTextView.visibility = View.VISIBLE
     }
+
     private fun hideMisoPoint() {
-        val misoPointTextView: TextView = findViewById(R.id.smile_text_cost)
+        val misoPointTextView: TextView = findViewById(R.id.miso_point_text_view)
 
         misoPointTextView.visibility = View.GONE
     }

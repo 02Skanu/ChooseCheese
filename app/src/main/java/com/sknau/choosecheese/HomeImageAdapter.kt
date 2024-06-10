@@ -1,50 +1,40 @@
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sknau.choosecheese.R
 
-class HomeImageAdapter(private val onClick: (String) -> Unit) : RecyclerView.Adapter<HomeImageAdapter.ImageViewHolder>() {
+class HomeImageAdapter(private val clickListener: (String) -> Unit) : RecyclerView.Adapter<HomeImageAdapter.HomeImageViewHolder>() {
 
-    private val images = mutableListOf<String>()
+    private val images: MutableList<String> = mutableListOf()
 
-    // 어댑터를 통해 이미지 데이터 설정
-    fun addImages(newImages: List<String>?) {
-        newImages?.let {
-            val startPosition = images.size
-            images.addAll(it)
-            notifyItemRangeInserted(startPosition, it.size)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeImageViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_image, parent, false)
+        return HomeImageViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: HomeImageViewHolder, position: Int) {
+        val imageUrl = images[position]
+        Glide.with(holder.imageView.context)
+            .load(imageUrl)
+            .into(holder.imageView)
+
+        holder.imageView.setOnClickListener {
+            clickListener(imageUrl)
         }
     }
 
-    // 뷰홀더 생성
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_home_image, parent, false)
-        return ImageViewHolder(view)
+    override fun getItemCount(): Int = images.size
+
+    fun setImages(newImages: List<String>) {
+        images.clear()
+        images.addAll(newImages)
+        notifyDataSetChanged()
     }
 
-    // 뷰홀더와 데이터 바인딩
-    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        holder.bind(images[position])
-    }
-
-    override fun getItemCount(): Int {
-        return images.size
-    }
-
-    // 이미지 뷰홀더 정의
-    inner class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(imageUrl: String) {
-            Glide.with(itemView.context)
-                .load(imageUrl)
-                .placeholder(R.drawable.placeholder_image)
-                .into(itemView.findViewById(R.id.home_imageView))
-
-            itemView.setOnClickListener {
-                onClick(imageUrl)
-            }
-        }
+    inner class HomeImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val imageView: ImageView = itemView.findViewById(R.id.home_imageView)
     }
 }

@@ -8,12 +8,14 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class TwoPeopleFragment : Fragment() {
+class People4Fragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PeopleAdapter
 
@@ -22,22 +24,20 @@ class TwoPeopleFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.fragment_twopeople, container, false)
-        recyclerView = view.findViewById(R.id.people2_recyclerView)
-        recyclerView.layoutManager = GridLayoutManager(context, 2)
+        val view = inflater.inflate(R.layout.fragment_fourpeople, container, false)
+        recyclerView = view.findViewById(R.id.people4_recyclerView)
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sharedPreferences = this.getActivity()?.getSharedPreferences("accessTOKEN",
-            AppCompatActivity.MODE_PRIVATE
-        )
+        val sharedPreferences = this.activity?.getSharedPreferences("accessTOKEN", AppCompatActivity.MODE_PRIVATE)
         val authToken = sharedPreferences?.getString("accessToken", null) ?: ""
 
         val retrofit = LogicApiClient.getClient(authToken)
-        val apiService = retrofit.create(People2ApiService::class.java)
+        val apiService = retrofit.create(People4ApiService::class.java)
 
         apiService.getImages().enqueue(object : Callback<PeopleResponse> {
             override fun onResponse(call: Call<PeopleResponse>, response: Response<PeopleResponse>) {
@@ -61,19 +61,19 @@ class TwoPeopleFragment : Fragment() {
 
     private fun sendHeartClick(imageUrl: String, authToken: String) {
         val retrofit = LogicApiClient.getClient(authToken)
-        val apiService = retrofit.create(People2ApiService::class.java)
+        val apiService = retrofit.create(People4ApiService::class.java)
 
-        apiService.sendImageClick(imageUrl).enqueue(object : Callback<ClickResponseData> {
-            override fun onResponse(call: Call<ClickResponseData>, response: Response<ClickResponseData>) {
+        apiService.sendImageClick(imageUrl).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    Log.d("PeopleFragment", "Image click sent successfully")
+                    Log.d("PeopleFragment", "이미지 클릭 성공")
                 } else {
-                    Log.e("PeopleFragment", "Failed to send image click")
+                    Log.e("PeopleFragment", "응~ 응답 안")
                 }
             }
 
-            override fun onFailure(call: Call<ClickResponseData>, t: Throwable) {
-                Log.e("PeopleFragment", "Failed to send image click", t)
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("PeopleFragment", "응~ 망함", t)
             }
         })
     }

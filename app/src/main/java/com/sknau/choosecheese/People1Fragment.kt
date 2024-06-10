@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class OnePeopleFragment : Fragment() {
+class People1Fragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PeopleAdapter
 
@@ -24,16 +25,14 @@ class OnePeopleFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_onepeople, container, false)
         recyclerView = view.findViewById(R.id.people1_recyclerView)
-        recyclerView.layoutManager = GridLayoutManager(context, 2)
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sharedPreferences = this.getActivity()?.getSharedPreferences("accessTOKEN",
-            AppCompatActivity.MODE_PRIVATE
-        )
+        val sharedPreferences = this.activity?.getSharedPreferences("accessTOKEN", AppCompatActivity.MODE_PRIVATE)
         val authToken = sharedPreferences?.getString("accessToken", null) ?: ""
 
         val retrofit = LogicApiClient.getClient(authToken)
@@ -63,17 +62,17 @@ class OnePeopleFragment : Fragment() {
         val retrofit = LogicApiClient.getClient(authToken)
         val apiService = retrofit.create(People1ApiService::class.java)
 
-        apiService.sendImageClick(imageUrl).enqueue(object : Callback<ClickResponseData> {
-            override fun onResponse(call: Call<ClickResponseData>, response: Response<ClickResponseData>) {
+        apiService.sendImageClick(imageUrl).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    Log.d("PeopleFragment", "Image click sent successfully")
+                    Log.d("PeopleFragment", "이미지 클릭 성공")
                 } else {
-                    Log.e("PeopleFragment", "Failed to send image click")
+                    Log.e("PeopleFragment", "응~ 응답 안")
                 }
             }
 
-            override fun onFailure(call: Call<ClickResponseData>, t: Throwable) {
-                Log.e("PeopleFragment", "Failed to send image click", t)
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("PeopleFragment", "응~ 망함", t)
             }
         })
     }

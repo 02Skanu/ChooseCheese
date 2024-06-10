@@ -8,18 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 
-class PeopleAdapter(
-    private val images: List<PeopleData>,
-    private val onHeartClick: (String) -> Unit
-) : RecyclerView.Adapter<PeopleAdapter.ImageViewHolder>() {
+class CartAdapter(
+    private val images: List<PeopleData>
+) : RecyclerView.Adapter<CartAdapter.ImageViewHolder>() {
 
     class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageView: ImageView = itemView.findViewById(R.id.people_heart_imageView)
-        val heartImageView: ImageView = itemView.findViewById(R.id.heart_imageview)
+        val imageView: ImageView = itemView.findViewById(R.id.people_heart_filled_imageView)
+        val heartImageView: ImageView = itemView.findViewById(R.id.heart_filled_imageview)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_people_heart_empty, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_cart_heart_filled, parent, false)
         return ImageViewHolder(view)
     }
 
@@ -29,11 +28,6 @@ class PeopleAdapter(
             .load(imageModel.imageUrl)
             .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
             .into(holder.imageView)
-
-        holder.heartImageView.setOnClickListener {
-            holder.heartImageView.setImageResource(R.drawable.heart_filled)
-            onHeartClick(imageModel.imageUrl)
-        }
     }
 
     override fun getItemCount(): Int = images.size

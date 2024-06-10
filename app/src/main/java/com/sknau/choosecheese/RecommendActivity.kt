@@ -4,6 +4,7 @@ import PieChartApiService
 import RecommendApiService
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -109,7 +110,12 @@ class RecommendActivity : AppCompatActivity() {
 
                     if (poseStatusMap != null) {
                         val dataList = poseStatusMap.map { (key, value) ->
-                            PieEntry(value.toFloat(), key)
+                            try {
+                                PieEntry(value.toFloat(), key)
+                            } catch (e: NumberFormatException) {
+                                Log.e("RecommendActivity", "Invalid float value: $value for key: $key")
+                                null
+                            }
                         }
 
                         val dataSet = PieDataSet(dataList, "").apply {
@@ -171,7 +177,12 @@ class RecommendActivity : AppCompatActivity() {
 
                     if (moodStatusMap != null) {
                         val dataList = moodStatusMap.map { (key, value) ->
-                            PieEntry(value.toFloat(), key)
+                            try {
+                                PieEntry(value.toFloat(), key)
+                            } catch (e: NumberFormatException) {
+                                Log.e("RecommendActivity", "Invalid float value: $value for key: $key")
+                                null
+                            }
                         }
 
                         val dataSet = PieDataSet(dataList, "").apply {
@@ -195,46 +206,65 @@ class RecommendActivity : AppCompatActivity() {
                         binding.recommendPieChart2.apply {
                             data = pieData
                             setEntryLabelColor(Color.BLACK)
+                            setEntryLabelTextSize(10F)
                             centerText = "테마별"
                             invalidate()
                             animateY(1400, Easing.EaseInOutQuad)
                             legend.isEnabled = false
                         }
                     } else {
-                        Log.d("pieCheck", "Response body is null")
+                        Log.d("pieCheck2", "Response body is null")
                     }
                 } else {
                     val errorBody = response.errorBody()?.string()
-                    Log.d("pieCheck", "Failed: ${response.code()} - $errorBody")
+                    Log.d("pieCheck2", "Failed: ${response.code()} - $errorBody")
                 }
             }
 
             override fun onFailure(call: Call<ChartData>, t: Throwable) {
-                Log.d("pieCheck", "onFailure: ${t.message}")
+                Log.d("pieCheck2", "onFailure: ${t.message}")
             }
         })
     }
     private fun setupViewPager(authToken: String) {
         val viewPager: ViewPager2 = findViewById(R.id.recommend_viewpager)
-        val retrofit2 = LogicApiClient.getClient(authToken)
-            .create(RecommendApiService::class.java)
+        val retrofit2 = LogicApiClient.getClient(authToken).create(RecommendApiService::class.java)
 
         lifecycleScope.launch {
             try {
                 val recommendations = retrofit2.getViewPagerData()
                 val adapter = RecommendPagerAdapter(recommendations.recommend_images ?: emptyList())
-                viewPager.apply{
-                    clipToPadding= false
-                    clipChildren= false
-                    offscreenPageLimit = 1
+                viewPager.apply {
+                    clipToPadding = false
+                    clipChildren = false
+                    setPadding(50, 0, 50, 0)
+                    setPageTransformer(MarginPageTransformer(20))
                 }
-                viewPager.setPageTransformer(MarginPageTransformer(100))
-                viewPager.setPadding(300,0,300,0)
+
                 viewPager.adapter = adapter
             } catch (e: Exception) {
                 Log.e("RecommendActivity", "Error getting recommendations: ${e.message}")
             }
         }
+        viewPager.setCurrentItem(0, false)
+        viewPager.addItemDecoration(MarginItemDecoration(16))
+        viewPager.setPageTransformer(ScalePageTransformer())
+    }
+
+}
+
+class MarginItemDecoration(private val margin: Int) : RecyclerView.ItemDecoration() {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        outRect.right = margin
+        outRect.left = margin
+    }
+}
+
+class ScalePageTransformer : ViewPager2.PageTransformer {
+    override fun transformPage(page: View, position: Float) {
+        val scaleFactor = Math.max(0.85f, 1 - Math.abs(position))
+        page.scaleX = scaleFactor
+        page.scaleY = scaleFactor
     }
 }
 
@@ -254,6 +284,7 @@ class RecommendPagerAdapter(private val recommendImages: List<String>)
             .load(imageUrl)
             .into(holder.imageView)
     }
+
 
     override fun getItemCount(): Int {
         return recommendImages.size
