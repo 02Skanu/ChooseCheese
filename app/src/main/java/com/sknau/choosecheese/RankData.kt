@@ -9,5 +9,6 @@ data class RankItem(
 
 data class RankData(
     val ranking: List<RankItem>,
-    val my_total_miso: List<Int>
+    val my_total_miso: List<Int>,
+    val my_username: String
 )

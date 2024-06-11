@@ -40,6 +40,28 @@
         android:paddingHorizontal="8dp"
         app:layout_constraintTop_toBottomOf="@id/main_divider" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_arrow"
+        android:layout_marginTop="18dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintTop_toBottomOf="@id/main_story_recyclerview"
+        app:layout_constraintStart_toEndOf="@id/main_cheese_logo"
+        app:layout_constraintEnd_toStartOf="@id/main_click_text"/>
+    <TextView
+        android:id="@+id/main_click_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="클릭!"
+        android:textColor="#9EA3B2"
+        android:fontFamily="@font/bmjua_otf"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/main_story_recyclerview"
+        app:layout_constraintStart_toEndOf="@id/main_cheese_logo"/>
+
     <ImageButton
         android:id="@+id/main_cheese_logo"
         android:layout_width="100dp"

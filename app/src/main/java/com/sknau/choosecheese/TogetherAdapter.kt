@@ -22,6 +22,7 @@ class TogetherAdapter(private val images: List<String>) : RecyclerView.Adapter<T
         val imageUrl = images[position]
         Glide.with(holder.imageView.context)
             .load(imageUrl)
+            .placeholder(R.drawable.placeholder_image)
             .into(holder.imageView)
     }
 

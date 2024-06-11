@@ -59,7 +59,7 @@ class RankFragment : Fragment() {
                     rankData?.let {
                         rankAdapter.updateRanks(it.ranking)
                         val username = it.ranking.firstOrNull()?.username ?: "Unknown"
-                        totalScoreTextView.text = "${username}님의 미소 점수: ${it.my_total_miso.firstOrNull() ?: 0}"
+                        totalScoreTextView.text = "${it.my_username}님의 미소 점수: ${it.my_total_miso.firstOrNull() ?: 0}"
                         Log.d("RankData", "Ranking: ${it.ranking}")
                         Log.d("RankData", "My Total Miso: ${it.my_total_miso}")
                     }

@@ -47,41 +47,42 @@ class QrFragment : Fragment() {
     ) {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
-            if (result.contents == null) {
-                Toast.makeText(context, "Cancelled", Toast.LENGTH_SHORT).show()
-            } else {
-                Log.d("QrFragment", "Scanned from Fragment: ${result.contents}")
-                Toast.makeText(context, "Scanned -> " + result.contents, Toast.LENGTH_SHORT).show()
 
-                val sharedPreferences = this.getActivity()?.getSharedPreferences("accessTOKEN", AppCompatActivity.MODE_PRIVATE)
-                val authToken = sharedPreferences?.getString("accessToken", null)?.let {
-                    it
-                } ?: ""
+            Log.d("QrFragment", "Scanned from Fragment: ${result.contents}")
 
-                val retrofit = LogicApiClient.getClient(authToken)
-                val apiService = retrofit.create(QrApiService::class.java)
-                val data = QrData(result.contents)
+            val sharedPreferences = this.getActivity()
+                ?.getSharedPreferences("accessTOKEN", AppCompatActivity.MODE_PRIVATE)
+            val authToken = sharedPreferences?.getString("accessToken", null)?.let {
+                it
+            } ?: ""
 
-                apiService.sendData(data).enqueue(object : Callback<Void> {
-                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        if (response.isSuccessful) {
-                            Log.d("QrFragment", "Data sent successfully")
-                            val bundle = bundleOf("imageUrl" to result.contents)
-                            findNavController().navigate(R.id.action_qrFragment_to_homeFragment, bundle)
-                            Log.d("QrFragment", "Navigating to HomeFragment")
-                        } else {
-                            Log.e("Response Error", "Code: ${response.code()}, Message: ${response.message()}")
-                        }
+            val retrofit = LogicApiClient.getClient(authToken)
+            val apiService = retrofit.create(QrApiService::class.java)
+            val data = QrData(result.contents)
+
+            apiService.sendData(data).enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Log.d("QrFragment", "Data sent successfully")
+                        val bundle = bundleOf("imageUrl" to result.contents)
+                        findNavController().navigate(R.id.action_qrFragment_to_homeFragment, bundle)
+                        Log.d("QrFragment", "Navigating to HomeFragment")
+                    } else {
+                        Log.e(
+                            "Response Error",
+                            "Code: ${response.code()}, Message: ${response.message()}"
+                        )
                     }
+                }
 
-                    override fun onFailure(call: Call<Void>, t: Throwable) {
-                        Log.e("Network Error", "Connection failed", t)
-                    }
-                })
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Log.e("Network Error", "Connection failed", t)
+                }
+            })
 
-                val mActivity = activity as MainActivity
-                mActivity.finishScan()
-            }
+            val mActivity = activity as MainActivity
+            mActivity.finishScan()
+
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }

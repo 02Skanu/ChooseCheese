@@ -33,6 +33,7 @@ class StoryPagerAdapter(
         val imageUrl = storyUrls[position]
         Glide.with(holder.imageView.context)
             .load(imageUrl)
+            .placeholder(R.drawable.placeholder_image)
             .transform(CircleCrop())
             .into(holder.imageView)
 

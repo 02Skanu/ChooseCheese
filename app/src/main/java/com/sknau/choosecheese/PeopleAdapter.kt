@@ -27,6 +27,7 @@ class PeopleAdapter(
         val imageModel = images[position]
         GlideApp.with(holder.imageView.context)
             .load(imageModel.imageUrl)
+            .placeholder(R.drawable.placeholder_image)
             .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL))
             .into(holder.imageView)
 
