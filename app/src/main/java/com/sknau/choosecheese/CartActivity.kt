@@ -28,6 +28,7 @@ class CartActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+
         recyclerView = findViewById(R.id.cart_recyclerview)
         recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         fetchLikedImages()

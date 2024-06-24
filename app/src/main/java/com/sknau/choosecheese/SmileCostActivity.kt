@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.sknau.choosecheese.databinding.ActivitySmileCostBinding
+import retrofit2.create
 
 class SmileCostActivity : AppCompatActivity() {
 
@@ -30,6 +31,8 @@ class SmileCostActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         cardImg = findViewById(R.id.cardImg) // cardImg 초기화
+
+
 
         val button: ImageButton = findViewById(R.id.cost_back_button)
         button.setOnClickListener {

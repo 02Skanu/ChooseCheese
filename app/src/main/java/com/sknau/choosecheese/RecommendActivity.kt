@@ -113,7 +113,10 @@ class RecommendActivity : AppCompatActivity() {
                             try {
                                 PieEntry(value.toFloat(), key)
                             } catch (e: NumberFormatException) {
-                                Log.e("RecommendActivity", "Invalid float value: $value for key: $key")
+                                Log.e(
+                                    "RecommendActivity",
+                                    "Invalid float value: $value for key: $key"
+                                )
                                 null
                             }
                         }
@@ -159,6 +162,7 @@ class RecommendActivity : AppCompatActivity() {
             }
         })
     }
+
     private fun setupPieChart2(authToken: String) {
         binding.recommendPieChart2.setUsePercentValues(true)
 
@@ -180,7 +184,10 @@ class RecommendActivity : AppCompatActivity() {
                             try {
                                 PieEntry(value.toFloat(), key)
                             } catch (e: NumberFormatException) {
-                                Log.e("RecommendActivity", "Invalid float value: $value for key: $key")
+                                Log.e(
+                                    "RecommendActivity",
+                                    "Invalid float value: $value for key: $key"
+                                )
                                 null
                             }
                         }
@@ -226,6 +233,7 @@ class RecommendActivity : AppCompatActivity() {
             }
         })
     }
+
     private fun setupViewPager(authToken: String) {
         val viewPager: ViewPager2 = findViewById(R.id.recommend_viewpager)
         val retrofit2 = LogicApiClient.getClient(authToken).create(RecommendApiService::class.java)
@@ -254,7 +262,12 @@ class RecommendActivity : AppCompatActivity() {
 }
 
 class MarginItemDecoration(private val margin: Int) : RecyclerView.ItemDecoration() {
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
         outRect.right = margin
         outRect.left = margin
     }
@@ -268,12 +281,13 @@ class ScalePageTransformer : ViewPager2.PageTransformer {
     }
 }
 
-class RecommendPagerAdapter(private val recommendImages: List<String>)
-    : RecyclerView.Adapter<RecommendPagerAdapter.RecommendViewHolder>() {
+class RecommendPagerAdapter(private val recommendImages: List<String>) :
+    RecyclerView.Adapter<RecommendPagerAdapter.RecommendViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecommendViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_recommend, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_recommend, parent, false)
         Log.d("RecommendPagerAdapter", "recommendImages: $recommendImages")
         return RecommendViewHolder(view)
     }
